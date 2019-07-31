@@ -1,0 +1,30 @@
+---
+title: "Report of the forecasted sales volume and the optimum amount of inventory replenishment"
+output: word_document
+params:
+  n_t: NA
+  data_plot: NA 
+  item_n: NA
+  dt_st: NA
+  dt_end: NA
+---
+
+Recomended amount of inventory replenishment for **`r params$item_n`** are on period from *`r params$dt_st` to `r params$dt_end`* is **`r params$n_t`**.
+
+The sales dynamics graph for **`r params$item_n`** product is shown below:
+
+```{r plot, echo=FALSE}
+df_plot_rep <- params$data_plot %>% filter(!is.na(y_pred_mean))
+p<-ggplot(data=df_plot_rep, aes(x=x, y=y_pred_mean, label = round(y_pred_mean))) + 
+    geom_point() + 
+    geom_line(color="#336600") +
+    geom_ribbon(data=df_plot_rep,aes(ymin=y_pred_low, ymax=y_pred_up), fill = "#006633", linetype=2, alpha=0.1)+
+    geom_text(vjust = 2) + 
+    xlab("Date") + ylab("Sales")
+
+p
+```
+
+Approved by________________Maksym Bilychenko
+
+

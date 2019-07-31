@@ -1,0 +1,38 @@
+---
+title: "Report of the forecasted sales volume and the optimal amount of inventory replenishment of the product group"
+output: word_document
+params:
+  dt_st: NA
+  dt_end: NA
+  group_n: NA
+  table_t: NA
+  df_plot: NA
+
+
+---
+
+Recomended amount of inventory replenishment for group **`r params$group_n`** on period from *`r params$dt_st` to `r params$dt_end`* are in the table below:
+
+```{r table, echo=FALSE}
+params$table_t
+```
+
+The dynamics of changes in the sales volume of group **`r params$group_n`** is shown below:
+
+```{r plot, echo=FALSE}
+df_to_plot <- params$df_plot
+dt_end <- params$dt_end
+
+n_period_len <- length(as.character(unique(df_to_plot$period)))
+dt_st <- dt_end-n_period_len+1
+period_date <- seq.Date(from = dt_st, to = dt_end, by = "day")
+n_repeat <- length(as.character(unique(df_to_plot$item)))
+df_to_plot$date_period <- rep(period_date, n_repeat)
+
+g1 <- ggplot(df_to_plot, aes(x = date_period, y = measurement, color = item))
+g1+ geom_point() + 
+     geom_line() +
+     xlab("Date") + ylab("Sales")
+``` 
+
+Approved by________________Maksym Bilychenko
